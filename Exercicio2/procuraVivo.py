@@ -9,7 +9,8 @@ HOST = ''              # Endereco IP do Servidor (não alterar)
 PORT = 6000            # Porta que o Servidor esta
 
 #IP_ACESSADO = 'localhost' # Endereco IP de quem será acessado
-LISTA_ATIVA = ['26.158.231.204','192.1.70.240','192.1.70.100','192.1.70.2'] # Essa lista contem todas as maquinas
+LISTA_ATIVA = ['26.158.231.204','26.135.202.158','192.168.0.31',
+'192.1.70.240','192.1.70.100','192.1.70.2'] # Essa lista contem todas as maquinas
 LISTA_FALHA = [] # Essa lista são os que falharam
 
 def escuta(tcp):
@@ -82,10 +83,11 @@ if __name__ == "__main__":
             thread.start_new_thread(enviar,(ip,6000)) # Envia
         LISTA_RESPOSTA = []
 
+        print("\n----------------------------------------------------\n")
         # ESPERA POR RESPOSTA
         print("Server: Esperando conexão...")
         #time.sleep(60) # 1 min para repetir de novo
-        tcp.settimeout(60)
+        tcp.settimeout(10)
         try:
             while True:
                 con, cliente = tcp.accept()
@@ -95,6 +97,7 @@ if __name__ == "__main__":
             print ('Server: Fim do tempo')  
             tcp.settimeout(None)
 
+        print("\n----------------------------------------------------\n")
         # ATUALIZAR LISTA
         print("Server: Lista sendo atualizada...")
         LISTA_TMP = LISTA_ATIVA.copy()
@@ -103,11 +106,15 @@ if __name__ == "__main__":
                 LISTA_FALHA.append(i) # Coloca na lista que falho
                 LISTA_ATIVA.remove(i) # Remove da lista ativa
 
-        print("Lista falha:")
-        print(LISTA_FALHA)
-        print("Lista ativa:")
-        print(LISTA_ATIVA)
+        print("Lista falha: " + str(LISTA_FALHA))
+        print("Lista ativa: " + str(LISTA_ATIVA))
 
-        time.sleep(60) # 1 min para repetir de novo
+        if len(LISTA_ATIVA) <= 0:
+            break
+
+        time.sleep(10) # 1 min para repetir de novo
+        print("\n****************************************************\n")
 
     tcp.close()
+
+    print("*** FIM ***")
