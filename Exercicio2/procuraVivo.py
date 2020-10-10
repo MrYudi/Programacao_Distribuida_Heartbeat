@@ -12,6 +12,22 @@ PORT = 6000            # Porta que o Servidor esta
 LISTA_ATIVA = ['26.158.231.204','192.1.70.240','192.1.70.100','192.1.70.2'] # Essa lista contem todas as maquinas
 LISTA_FALHA = [] # Essa lista são os que falharam
 
+def escuta(tcp):
+    # Cria o Socket (Receptor)
+    tcp = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+    # Configurações do servidor
+    orig = (HOST, PORT)
+    tcp.bind(orig)
+    tcp.listen(1)
+
+    while True:
+        con, cliente = tcp.accept()
+        LISTA_RESPOSTA.append(cliente[0]) # Colocana na lista o IP
+        thread.start_new_thread(conectado, (con, cliente))     
+
+    tcp.close()
+
 def conectado(con, cliente):
 
     print('Server: Conectado por '+ str(cliente))
@@ -32,12 +48,12 @@ def enviar(IP_ACESSADO,PORT):
 
     # Configurações (quem deve ser acessado?)
     server_address = (IP_ACESSADO, PORT)
-    print('Remetente: Acessando o IP: {} Porta: {}'.format(*server_address))
-
-    # Enviando mensagem
-    sock.connect(server_address)
+    print('Thread Enviar: Acessando o IP: {} Porta: {}'.format(*server_address))
 
     try:   
+        # Enviando mensagem
+        sock.connect(server_address)
+
         message = b'heartbeat'
         #print('Remetente: Enviando para {!r}'.format(message))
         sock.sendall(message)
@@ -49,7 +65,6 @@ def enviar(IP_ACESSADO,PORT):
 
 if __name__ == "__main__":
     
-
     # Cria o Socket (Receptor)
     tcp = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
@@ -57,17 +72,19 @@ if __name__ == "__main__":
     orig = (HOST, PORT)
     tcp.bind(orig)
     tcp.listen(1)
+    #thread.start_new_thread(escuta,(ip,6000)) # Envia
     
     while True:
         print("Server: Enviando...")
         # ENVIANDO MENSAGENS
         LISTA_RESPOSTA = LISTA_ATIVA.copy()
-#        for ip in LISTA_RESPOSTA:
-#            thread.start_new_thread(enviar,(ip,6000)) # Envia
+        for ip in LISTA_RESPOSTA:
+            thread.start_new_thread(enviar,(ip,6000)) # Envia
         LISTA_RESPOSTA = []
 
         # ESPERA POR RESPOSTA
         print("Server: Esperando conexão...")
+        #time.sleep(60) # 1 min para repetir de novo
         tcp.settimeout(60)
         try:
             while True:

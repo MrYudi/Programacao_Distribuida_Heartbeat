@@ -35,9 +35,8 @@ if __name__ == "__main__":
     tcp.bind(orig)
     tcp.listen(1)
 
-    print("Cliente: Esperando conexão...")
-
     while True:
+        print("Cliente: Esperando conexão...")
         con, cliente = tcp.accept()
         print('Cliente: Conectado por '+ str(cliente))
         con.close()
