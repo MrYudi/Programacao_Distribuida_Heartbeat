@@ -9,7 +9,7 @@ HOST = ''              # Endereco IP do Servidor (não alterar)
 PORT = 6000            # Porta que o Servidor esta
 
 #IP_ACESSADO = 'localhost' # Endereco IP de quem será acessado
-LISTA_ATIVA = ['127.0.0.1'] # Essa lista contem todas as maquinas
+LISTA_ATIVA = ['26.158.231.204','192.1.70.240','192.1.70.100','192.1.70.2'] # Essa lista contem todas as maquinas
 LISTA_FALHA = [] # Essa lista são os que falharam
 
 def conectado(con, cliente):
@@ -61,18 +61,18 @@ if __name__ == "__main__":
     while True:
         print("Server: Enviando...")
         # ENVIANDO MENSAGENS
-        LISTA_TMP = LISTA_ATIVA.copy()
-        for ip in LISTA_TMP:
-            thread.start_new_thread(enviar,(ip,6000)) # Envia
-        LISTA_TMP = []
+        LISTA_RESPOSTA = LISTA_ATIVA.copy()
+#        for ip in LISTA_RESPOSTA:
+#            thread.start_new_thread(enviar,(ip,6000)) # Envia
+        LISTA_RESPOSTA = []
 
         # ESPERA POR RESPOSTA
         print("Server: Esperando conexão...")
-        tcp.settimeout(10)
+        tcp.settimeout(60)
         try:
             while True:
                 con, cliente = tcp.accept()
-                LISTA_TMP.append(cliente[0]) # Colocana na lista o IP
+                LISTA_RESPOSTA.append(cliente[0]) # Colocana na lista o IP
                 thread.start_new_thread(conectado, (con, cliente))   
         except socket.timeout:
             print ('Server: Fim do tempo')  
@@ -80,8 +80,9 @@ if __name__ == "__main__":
 
         # ATUALIZAR LISTA
         print("Server: Lista sendo atualizada...")
-        for i in LISTA_ATIVA:
-            if not i in LISTA_TMP: # se não esta na lista e nem as que falho
+        LISTA_TMP = LISTA_ATIVA.copy()
+        for i in LISTA_TMP:
+            if not i in LISTA_RESPOSTA: # se não esta na lista e nem as que falho
                 LISTA_FALHA.append(i) # Coloca na lista que falho
                 LISTA_ATIVA.remove(i) # Remove da lista ativa
 
