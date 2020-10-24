@@ -108,7 +108,11 @@ if __name__ == "__main__":
     orig = (HOST, PORT)
     tcp.bind(orig)
     tcp.listen(1)
+    ADD_LISTA = False
+    
     thread.start_new_thread(escuta,()) # Thread de escuta
+        
+    time.sleep(10)
     
     while True:
         print("Server: Enviando...")
