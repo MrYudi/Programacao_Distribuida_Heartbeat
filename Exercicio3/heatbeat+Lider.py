@@ -13,6 +13,39 @@ LISTA_ATIVA = ['26.158.231.204','26.135.202.158','192.168.0.31',
 '192.1.70.240','192.1.70.100','192.1.70.2'] # Essa lista contem todas as maquinas
 LISTA_FALHA = [] # Essa lista são os que falharam
 
+'''
+    1: "26.139.227.213", # Alexander
+    2: "26.139.134.240", # Alishow
+    3: "26.130.240.169", # Giron
+    4: "26.139.134.20", # Ariel
+    5: "26.136.12.80", # Breda
+    6: "26.139.134.120", # Christian
+    7: "26.139.134.100", # David
+    8: "26.186.90.172", # David
+    9: "26.139.134.60", # Eduardo
+    10: "26.139.135.64", # Galhardo
+    11: "26.139.134.160", # Belchior
+    12: "26.130.240.69", # Yudi
+    13: "26.159.190.84", # Guilherme
+    14: "26.135.202.138", # Juliano
+    15: "26.139.135.24", # Leonardo
+    16: "26.133.240.81", # Lorene
+    17: "26.135.201.234", # Lucas Fonseca
+    18: "26.130.240.89", # Lucas Passos
+    19: "26.145.208.62", # Marcio
+    20: "26.135.202.98", # Rafael Santana
+    21: "26.130.245.89", # Rafael Santos
+    22: "26.135.201.194", # Renan
+    23: "26.130.241.233", # Vanessa
+    24: "26.135.201.174", # Vinicius
+    25: "26.135.204.126", # Vitor
+    26: "26.158.231.204", # Wallacy
+    27: "26.150.255.169", # Kortez
+    28: "26.135.202.178", # Kortez
+    29: "26.155.216.74", # Menassa
+    30: "26.139.135.144", # Rafael Ritter
+    31: "26.139.135.144", # Wallacy
+'''
 
 def escuta():
     # Cria o Socket (Receptor)
@@ -30,7 +63,6 @@ def escuta():
         thread.start_new_thread(conectado, (con, cliente))     
 
     tcp.close()
-
 
 def conectado(con, cliente):
 
@@ -96,7 +128,7 @@ if __name__ == "__main__":
         print("\n----------------------------------------------------\n")
         # ATUALIZAR LISTA
         print("Server: Lista sendo atualizada...")
-        LISTA_TMP = LISTA_ATIVA.copy()
+        LISTA_TMP = LISTA_ATIVA.copy() # Obs.: essa lista_tmp pode ter ip repitido
         for i in LISTA_TMP:
             if not i in LISTA_RESPOSTA: # se não esta na lista e nem as que falho
                 LISTA_FALHA.append(i) # Coloca na lista que falho
@@ -108,6 +140,7 @@ if __name__ == "__main__":
         if len(LISTA_ATIVA) <= 0:
             break    
 
+        time.sleep(60)
         print("\n****************************************************\n")
 
     tcp.close()

@@ -13,7 +13,6 @@ LISTA_ATIVA = ['26.158.231.204','26.135.202.158','192.168.0.31',
 '192.1.70.240','192.1.70.100','192.1.70.2'] # Essa lista contem todas as maquinas
 LISTA_FALHA = [] # Essa lista são os que falharam
 
-'''
 def escuta(tcp):
     # Cria o Socket (Receptor)
     tcp = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -29,7 +28,6 @@ def escuta(tcp):
         thread.start_new_thread(conectado, (con, cliente))     
 
     tcp.close()
-'''
 
 def conectado(con, cliente):
 
@@ -78,17 +76,6 @@ if __name__ == "__main__":
     #thread.start_new_thread(escuta,(ip,6000)) # Envia
     
     while True:
-        # MODO ESPERA 
-        print("Server: Modo espera...")
-        tcp.settimeout(60)
-        try:
-            while True:
-                con, cliente = tcp.accept()
-                thread.start_new_thread(conectado, (con, cliente))   
-        except socket.timeout:
-            tcp.settimeout(None)
-
-        print("\n----------------------------------------------------\n")
         print("Server: Enviando...")
         # ENVIANDO MENSAGENS
         LISTA_RESPOSTA = LISTA_ATIVA.copy()
@@ -123,8 +110,9 @@ if __name__ == "__main__":
         print("Lista ativa: " + str(LISTA_ATIVA))
 
         if len(LISTA_ATIVA) <= 0:
-            break    
+            break
 
+        time.sleep(10) # 1 min para repetir de novo
         print("\n****************************************************\n")
 
     tcp.close()
