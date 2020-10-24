@@ -47,6 +47,9 @@ LISTA_FALHA = [] # Essa lista são os que falharam
     31: "26.139.135.144", # Wallacy
 '''
 
+def maxlider():
+    pass
+
 def escuta():
     # Cria o Socket (Receptor)
     #tcp = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -109,10 +112,10 @@ if __name__ == "__main__":
     tcp.bind(orig)
     tcp.listen(1)
     ADD_LISTA = False
-    
+
     thread.start_new_thread(escuta,()) # Thread de escuta
         
-    time.sleep(10)
+    time.sleep(5)
     
     while True:
         print("Server: Enviando...")
@@ -143,6 +146,10 @@ if __name__ == "__main__":
 
         if len(LISTA_ATIVA) <= 0:
             break    
+
+        print("\n----------------------------------------------------\n")
+        # DEFINIR LIDER
+        maxlider()
 
         time.sleep(60)
         print("\n****************************************************\n")
